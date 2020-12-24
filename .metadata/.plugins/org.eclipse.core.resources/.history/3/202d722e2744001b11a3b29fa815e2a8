@@ -1,0 +1,8 @@
+package ch12;
+
+public class RegisterMgr {
+	private DBConnectionMgr conn;
+	public RegisterMgr() {
+			conn = DBConnectionMgr.getConnection();
+	}
+}

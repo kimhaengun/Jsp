@@ -1,0 +1,35 @@
+package com.cos.hello.service;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.cos.hello.dao.UsersDao;
+import com.cos.hello.model.Users;
+
+public class UserJoinService {
+	public void 회원가입(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		//데이터 원형  username = ssar&password=1234&email=ssar@nate.com
+		//1.Form의 input태그에 있는 3가지 값 username/password/email받기
+		String username = req.getParameter("username"); // key 값은 = name값
+		//getParameter = 파싱 해주는 함수
+		String password = req.getParameter("password"); // key 값은 = name값
+		String email = req.getParameter("email"); // key 값은 = name값
+		
+		Users user = Users.builder()
+				.username(username)
+				.password(password)
+				.email(email)
+				.build();
+		
+		UsersDao usersDao = new UsersDao(); //getinstance형식으로 변경 userdao private로
+		int result = usersDao.insert(user);
+		
+		if(result==1) {
+			resp.sendRedirect("auth/login.jsp");
+		}else {
+			resp.sendRedirect("auto/join.jsp");
+		}
+	}
+}

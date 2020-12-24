@@ -1,0 +1,53 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import config.DBConnection;
+
+public class MainApp {
+	public static void 추가(int id) {
+		String sql = "INSERT INTO test1(id) VALUES(?)";
+		Connection conn =DBConnection.getInstance();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			//executeUpdate --> 변경된 row count를 리턴, -1값 = 오류
+			System.out.println("result : "+result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void 삭제(int id) {
+		String sql = "DELETE FROM test1 WHERE id =?";
+		Connection conn =DBConnection.getInstance();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			//executeUpdate --> 변경된 row count를 리턴, -1값 = 오류
+			System.out.println("result : "+result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void 업데이트(int id) {
+		String sql = "UPDATE test1 SET id= 7 WHERE id=?" ;
+		Connection conn =DBConnection.getInstance();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			//executeUpdate --> 변경된 row count를 리턴, -1값 = 오류
+			System.out.println("result : "+result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		추가(9);
+		삭제(1);
+	}
+
+}
