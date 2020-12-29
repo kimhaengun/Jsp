@@ -3,10 +3,10 @@
 <%@ include file="../layout/header.jsp" %>
 <h1>Join Page</h1>
 <hr/>
-<form action="/hello/user?gubun=joinProc"method="post">
-	<input type = "text"name="username"placeholder="username"/>
-	<input type = "password"name="password"placeholder="password"/>
-	<input type = "email"name="email"placeholder="email"/>
+<form action="/hello/user?gubun=joinProc" method="post">
+	<input type = "text" name="username" placeholder="username"/>
+	<input type = "password" name="password" placeholder="password"/>
+	<input type = "email" name="email" placeholder="email"/>
 	<button>회원가입</button>
 </form>
 </body>

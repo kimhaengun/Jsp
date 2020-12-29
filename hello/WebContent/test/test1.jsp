@@ -8,7 +8,7 @@
 </head>
 <body>
 <a href="comment">링크클릭</a> 
-<form method="post"action="comment">
+<form method="post" action="comment">
 	<button>전송</button>
 </form>
 </body>

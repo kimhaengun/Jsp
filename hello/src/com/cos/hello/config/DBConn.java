@@ -1,23 +1,29 @@
 package com.cos.hello.config;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 public class DBConn {
+
 	public static Connection getInstance() {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		String url = "jdbc:mysql://localhost:3306/ssar?serverTimezone=Asia/Seoul";
+		String username = "ssar";
+		String password = "bitc5600";
 		try {
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			DataSource ds = (DataSource)envContext.lookup("mysql/ssar");
-			Connection conn = ds.getConnection();
-			System.out.println("성공");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(url, username, password);
+			
+			System.out.println("DB 연결성공");
 			return conn;
 		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("DB 연결 실패 : "+e.getMessage());
+			e.printStackTrace();
+			System.out.println("실패");
 		}
 		return null;
 	}

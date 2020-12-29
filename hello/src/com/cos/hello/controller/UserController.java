@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.cos.hello.config.DBConn;
 import com.cos.hello.dao.UsersDao;
 import com.cos.hello.model.Users;
-import com.cos.hello.service.UserJoinService;
+import com.cos.hello.service.UserService;
 
 //디스패쳐의 역할 = 분기 = 필요한 View를 응답해주는것
 public class UserController extends HttpServlet{
@@ -36,67 +36,39 @@ public class UserController extends HttpServlet{
 	protected void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("comment process 요청");
 		System.out.println("UserController 실행됨");
-		
+		//req.getparameter함수 실행시에 파싱하기 때문에
+		//파싱전에 인코딩해줘야한다.
 		String gubun = req.getParameter("gubun"); // =/hello/front
 		System.out.println(gubun);
 		route(gubun, req, resp);
 	}
 	
 	private void route(String gubun, HttpServletRequest req, HttpServletResponse resp)throws  IOException, ServletException {
+
+		UserService userService = new UserService();
+		
 		if(gubun.equals("login")) {
 			resp.sendRedirect("auth/login.jsp"); // 한번더 request
 			}else if(gubun.equals("join")) { //회원가입
 				resp.sendRedirect("auth/join.jsp"); // 한번더 request
+				
+				
 			}else if(gubun.equals("selectOne")) { //유저정보 보기
-				//인증이 필요한 페이지
-				String result;
-				HttpSession session = req.getSession();
-				if(session.getAttribute("sessionUser")!=null) { //인증끝.
-					Users user = (Users)session.getAttribute("sessionUser");	
-					result = "인증되었습니다.";
-					System.out.println(user);
-				}else {
-					result = "인증되지 않았습니다.";
-				}
-			req.setAttribute("result", result);	//req에 result저장 세션에 하지말자
-			RequestDispatcher dis = req.getRequestDispatcher("user/selectOne.jsp");
-			dis.forward(req, resp);
-			
+				userService.유저정보보기(req,resp);
 			}else if(gubun.equals("updateOne")) {
-				resp.sendRedirect("user/updateOne.jsp"); // 한번더 request
+				userService.유저정보수정페이지(req,resp);
 			}else if(gubun.equals("joinProc")) { // 회원가입 수행해줘
-				UserJoinService userJoinService = new UserJoinService();
-				userJoinService.회원가입(req, resp);
-
-
-//				System.out.println("********joinProc Start*********");
-//				System.out.println(username);
-//				System.out.println(password);
-//				System.out.println(email);
-//				System.out.println("********joinProc Start*********");
-
-				//3.INSERT가 정상적으로 되었다면  index.jsp를 응답
+				userService.회원가입(req, resp);
 			}else if(gubun.equals("loginProc")) {
 				//SELECT id, username, email FROM users WHERE username = ? AND password = ?
 				//DAO의 함수명 : login() / 재사용 불가 return Users오브젝트를 리턴
 				//정상이면 Users오브젝트에 담고 index.jsp / 비정상이면 login.jsp
-				//1. 전달되는 값 받기
-				String username = req.getParameter("username");
-				String password = req.getParameter("password");
-//				System.out.println("********loginProc Start*********");
-//				System.out.println(username);
-//				System.out.println(password);
-//				System.out.println("********loginProc Start*********");
-				//2.데이터베이스 값이 있는지 SELECT 해서 확인
-				Users user = Users.builder().id(1).username(username).build();
-				//3.
-				HttpSession session = req.getSession();
-				//session에는 사용자 패스워드 절대 넣지 않기
-				session.setAttribute("sessionUser", user);
+				userService.로그인(req, resp);
 				//모든 응답에는 Jsession Id가 쿠키로 추가된다.
-				
-				//4.index.jsp페이지로 이동
-				resp.sendRedirect("index.jsp");
+			}else if(gubun.equals("updateProc")) {
+				userService.회원수정(req,resp);
+			}else if(gubun.equals("deleteProc")) {
+				userService.회원삭제(req, resp);
 			}
 		}
 }
